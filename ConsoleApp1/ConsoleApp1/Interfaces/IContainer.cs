@@ -4,4 +4,5 @@ public interface IContainer
 {
     void Unload();
     void Load(int Masa);
+    void WriteInfo();
 }
