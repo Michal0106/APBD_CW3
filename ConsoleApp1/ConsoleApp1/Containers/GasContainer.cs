@@ -4,15 +4,13 @@ namespace ConsoleApp1.Containers;
 
 public class GasContainer : Container, IHazardNotifier
 {
-    private static int GasContainerNumber = 1;
-    private int PrivateGasContainerNumber;
-    private bool DangerousObjectInContainer = false;
-    private double Pressure = 0;
+    private static int _gasContainerNumber = 1;
+    private bool _dangerousObjectInContainer = false;
+    private double _pressure = 0;
     
     public GasContainer()
     {
         SerialNumber = GenerateSerialNumber();
-        PrivateGasContainerNumber = GasContainerNumber++;
     }
 
     public override void Unload()
@@ -22,11 +20,11 @@ public class GasContainer : Container, IHazardNotifier
 
     public override string GenerateSerialNumber()
     {
-        return $"KON-{GetType().Name.Substring(0, 1)}-{GasContainerNumber}";
+        return $"KON-{GetType().Name.Substring(0, 1)}-{_gasContainerNumber}";
     }
     public void Notify()
     {
-        DangerousObjectInContainer = true;
+        _dangerousObjectInContainer = true;
         Console.WriteLine($"Danger in LuquidContainer number : {SerialNumber}");
     }
 }

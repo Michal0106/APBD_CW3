@@ -1,4 +1,3 @@
-using System.Security.Principal;
 using ConsoleApp1.Containers;
 using ConsoleApp1.Interfaces;
 
@@ -7,13 +6,15 @@ namespace ConsoleApp1.Vehicles;
 public abstract class Vehicle : IVehicles
 {
     private List<Container> _containers;
-    public int _speed { get; }
-    public double _currentWeight { get; set; }
-    public int _maxWeight { get; }
-    public int _maxContainerNum { get; }
+    private string _vehicleType { get; set; }
+    private int _speed { get; }
+    private double _currentWeight { get; set; }
+    private int _maxWeight { get; }
+    private int _maxContainerNum { get; }
 
-    protected Vehicle(int speed, double currentWeight, int maxWeight, int maxContainerNum)
+    protected Vehicle(string vehicleType, int speed, double currentWeight, int maxWeight, int maxContainerNum)
     {
+        _vehicleType = vehicleType;
         _speed = speed;
         _currentWeight = currentWeight;
         _maxWeight = maxWeight;
@@ -94,6 +95,7 @@ public abstract class Vehicle : IVehicles
     public void WriteInfo()
     {
         Console.WriteLine("Vehicle Information:");
+        Console.WriteLine($"Vehicle Type: {_vehicleType}");
         Console.WriteLine($"Speed: {_speed} km/h");
         Console.WriteLine($"Maximum Weight: {_maxWeight} kg");
         Console.WriteLine($"Maximum Container Number: {_maxContainerNum}");
@@ -116,6 +118,6 @@ public abstract class Vehicle : IVehicles
             Console.WriteLine("No containers loaded.");
         }
     }
-
+    
     
 }

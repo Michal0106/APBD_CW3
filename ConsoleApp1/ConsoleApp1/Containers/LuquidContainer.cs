@@ -5,19 +5,19 @@ namespace ConsoleApp1.Containers;
 
 public class LuquidContainer : Container, IHazardNotifier
 {
-    public static int LuquidContainerNumber = 1;
-    public int PrivateLuquidContainerNumber { get; set;}
-    private bool DangerousObjectInContainer = false;
+    private static int _luquidContainerNumber = 1;
+    private int _privateLuquidContainerNumber { get; set;}
+    private bool _dangerousObjectInContainer = false;
 
     public LuquidContainer()
     {
         SerialNumber = GenerateSerialNumber();
-        PrivateLuquidContainerNumber = LuquidContainerNumber++;
+        _privateLuquidContainerNumber = _luquidContainerNumber++;
     }
 
     public override void Load(int Masa)
     {
-        if (DangerousObjectInContainer)
+        if (_dangerousObjectInContainer)
         {
             if (CargoWeightKg + Masa > 0.5 * MaximumLoadCapacity) Notify();
             else base.Load(Masa);
@@ -31,12 +31,12 @@ public class LuquidContainer : Container, IHazardNotifier
 
     public override string GenerateSerialNumber()
     {
-        return $"KON-{GetType().Name.Substring(0, 1)}-{LuquidContainerNumber}";
+        return $"KON-{GetType().Name.Substring(0, 1)}-{_luquidContainerNumber}";
     }
 
     public void Notify()
     {
-        DangerousObjectInContainer = true;
-        Console.WriteLine($"Danger in LuquidContainer number : {PrivateLuquidContainerNumber}");
+        _dangerousObjectInContainer = true;
+        Console.WriteLine($"Danger in LuquidContainer number : {_privateLuquidContainerNumber}");
     }
 }

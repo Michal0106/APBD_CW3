@@ -5,44 +5,53 @@ namespace ConsoleApp1.Containers;
 public class CoolingContainer : Container
 {
     private static int _coolingContainerNumber = 1;
-    private int _privateCoolingContainerNumber;
-    private static Dictionary<string, double>? _allowedProducts;
-    private double _containerTemperature;
-    private string _productType;
-    public CoolingContainer(string productType, double containerTemperature)
-    {
-        SerialNumber = GenerateSerialNumber();
-        _privateCoolingContainerNumber = _coolingContainerNumber++;
-        _allowedProducts = InitializeAllowedProducts();
-        _productType = productType;
-        _containerTemperature = containerTemperature;
-    }
+        private int _privateCoolingContainerNumber;
+        private static Dictionary<string, double>? _allowedProducts;
+        private string _loadedProductType;
+        private double _containerTemperature;
 
-    public void Load(int Masa,string Product)
-    {
-        if (Product != _productType)
+        public CoolingContainer(Dictionary<string, double> allowedProducts, double containerTemperature)
         {
-            throw new WrongTypeException("This container stores different products");
+            SerialNumber = GenerateSerialNumber();
+            _privateCoolingContainerNumber = _coolingContainerNumber++;
+            _allowedProducts = allowedProducts;
+            _loadedProductType = _allowedProducts.Keys.FirstOrDefault();
+            _containerTemperature = containerTemperature;
         }
-        if (_containerTemperature >= _allowedProducts[Product]) base.Load(Masa);
-    }
 
-    public Dictionary<string, double>? InitializeAllowedProducts()
-    {
-        return new Dictionary<string, double>()
+        public override void Load(int mass)
         {
-            { "Bananas", 13.3 },
-            { "Chocolate", 18 },
-            { "Fish", 2 },
-            { "Meat", -15 },
-            { "Ice cream", -18 },
-            { "Frozen pizza", -30 },
-            { "Cheese", 7.2 },
-            { "Sausages", 5 },
-            { "Butter", 20.5 },
-            { "Eggs", 19 }
-        };
-    }
+            if (!IsProductTypeAllowed())
+            {
+                throw new WrongTypeException($"Product type not allowed in cooling container {SerialNumber}");
+            }
+            if (!IsTemperatureSuitable())
+            {
+                throw new TemperatureOutOfRangeException($"Temperature out of range for the loaded product in cooling container {SerialNumber}");
+            }
+
+            base.Load(mass);
+        }
+
+        private bool IsProductTypeAllowed()
+        {
+            
+            if (_allowedProducts == null || _allowedProducts.Count == 0)
+            {
+                return false;
+            }
+
+            return _allowedProducts.ContainsKey(_loadedProductType);
+        }
+
+        private bool IsTemperatureSuitable()
+        {
+            if (_allowedProducts != null && _allowedProducts.TryGetValue(_loadedProductType, out double requiredTemperature))
+            {
+                return _containerTemperature >= requiredTemperature;
+            }
+            return false;
+        }
     public override string GenerateSerialNumber()
     {
         return $"KON-{GetType().Name.Substring(0, 1)}-{_coolingContainerNumber}";
